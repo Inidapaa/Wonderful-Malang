@@ -21,6 +21,7 @@ export default function CreateWisata() {
     jam_operasional: "",
   });
   const [file, setFile] = useState(null);
+  const [fileKey, setFileKey] = useState(0);
   const [loading, setLoading] = useState(false);
   const [pengelolaList, setPengelolaList] = useState([]);
   const [kecamatanList, setKecamatanList] = useState([]);
@@ -101,6 +102,7 @@ export default function CreateWisata() {
         jam_operasional: "",
       });
       setFile(null);
+      setFileKey((k) => k + 1);
       setSelectedPengelola("");
       setSelectedKecamatan("");
     }
@@ -246,6 +248,7 @@ export default function CreateWisata() {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
+            key={fileKey}
                 className="border border-primary bg-primary/20 rounded-xl p-2 w-full"
               />
             </div>
