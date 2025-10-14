@@ -76,7 +76,7 @@ const ImageOverlay = () => {
         <div className="flex justify-center pt-2">
           <Link
             to="/discovery"
-            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white/10 px-5 py-2 text-sm hover:bg-primary/20 transition"
+            className="inline-flex items-center gap-2 rounded-full border border-primary bg-white/10 px-5 py-2 text-sm hover:bg-blue-400/20 transition"
           >
             Lihat Selengkapnya
           </Link>

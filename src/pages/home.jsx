@@ -2,6 +2,7 @@ import Navbar from "../global/navbar.jsx";
 import HoverUser from "../components/home/hoveruser.jsx";
 import ImageOverlay from "../components/home/imageoverlay.jsx";
 import Card from "../components/home/card.jsx";
+import Footer from "../global/footer.jsx";
 
 const Home = () => {
   return (
@@ -38,6 +39,7 @@ const Home = () => {
           <ImageOverlay />
         </div>
       </section>
+      <Footer />
     </>
   );
 };

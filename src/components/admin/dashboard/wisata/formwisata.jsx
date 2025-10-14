@@ -109,7 +109,7 @@ export default function CreateWisata() {
   };
 
   return (
-    <div className="flex justify-center items-start min-h-[calc(100vh-2rem)] p-6">
+    <div className="flex justify-center items-start min-h-[calc(100vh-2rem)] p-6 font-display">
       <Card className="w-full max-w-2xl bg-white shadow-lg rounded-2xl border border-primary/20">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-primary text-center">
@@ -246,7 +246,7 @@ export default function CreateWisata() {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="border border-primary rounded-xl p-2 w-full"
+                className="border border-primary bg-primary/20 rounded-xl p-2 w-full"
               />
             </div>
 

@@ -18,7 +18,10 @@ const NotFound = () => {
         <footer class="mt-auto text-center py-5">
           <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
             <p class="text-sm text-gray-500 dark:text-neutral-500">
-              © All Rights Reserved. 2023.
+              © All Rights Reserved. 2025.
+            </p>
+            <p class="text-sm text-gray-500/20 dark:text-neutral-500/20">
+              dibuat oleh <a href="https://github.com/Inidapaa" class="text-blue-500/20">daffaarrafi</a>
             </p>
           </div>
         </footer>

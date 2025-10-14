@@ -15,14 +15,9 @@ const Navbar = () => {
                 Home
               </li>
             </Link>
-            <Link to="/">
+            <Link to="/discovery">
               <li className="relative after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:w-0 after:h-[3px] after:bg-blue-400  after:transition-all after:duration-300 hover:after:left-0 hover:after:w-full transition duration-500">
                 Discovery
-              </li>
-            </Link>
-            <Link to="/">
-              <li className="relative after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:w-0 after:h-[3px] after:bg-blue-400  after:transition-all after:duration-300 hover:after:left-0 hover:after:w-full transition duration-500">
-                Community
               </li>
             </Link>
             <Link to="/adminlogin">

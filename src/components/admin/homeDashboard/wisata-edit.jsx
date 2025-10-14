@@ -86,62 +86,10 @@ export default function WisataEdit() {
     e.preventDefault();
     setSaving(true);
 
-    let pengelolaId = pengelola?.id ?? null;
-    let kecamatanId = kecamatan?.id ?? null;
+    const pengelolaId = pengelola?.id ?? null;
+    const kecamatanId = kecamatan?.id ?? null;
 
-    // If existing pengelola selected, update it; otherwise if fields filled, create new
-    if (pengelolaId) {
-      await supabase
-        .from("pengelola")
-        .update({
-          nama_pengelola: pengelola.nama_pengelola,
-          kontak: pengelola.kontak,
-          alamat: pengelola.alamat,
-        })
-        .eq("id", pengelolaId);
-    } else if (
-      pengelola.nama_pengelola ||
-      pengelola.kontak ||
-      pengelola.alamat
-    ) {
-      const { data: newPeng, error } = await supabase
-        .from("pengelola")
-        .insert([
-          {
-            nama_pengelola: pengelola.nama_pengelola || null,
-            kontak: pengelola.kontak || null,
-            alamat: pengelola.alamat || null,
-          },
-        ])
-        .select()
-        .single();
-      if (!error && newPeng) pengelolaId = newPeng.id;
-    }
-
-    // If existing kecamatan selected, update it; otherwise if fields filled, create new
-    if (kecamatanId) {
-      await supabase
-        .from("kecamatan")
-        .update({
-          nama_kecamatan: kecamatan.nama_kecamatan,
-          deskripsi: kecamatan.deskripsi,
-        })
-        .eq("id", kecamatanId);
-    } else if (kecamatan.nama_kecamatan || kecamatan.deskripsi) {
-      const { data: newKec, error } = await supabase
-        .from("kecamatan")
-        .insert([
-          {
-            nama_kecamatan: kecamatan.nama_kecamatan || null,
-            deskripsi: kecamatan.deskripsi || null,
-          },
-        ])
-        .select()
-        .single();
-      if (!error && newKec) kecamatanId = newKec.id;
-    }
-
-    // Finally, update wisata with chosen or newly created FK ids
+    // Update wisata fields + foreign keys
     const { error: ew } = await supabase
       .from("wisata")
       .update({
@@ -180,31 +128,15 @@ export default function WisataEdit() {
               <Input
                 placeholder="Nama Wisata"
                 value={wisata.nama_wisata || ""}
-                onChange={(e) =>
-                  setWisata({ ...wisata, nama_wisata: e.target.value })
-                }
+                onChange={(e) => setWisata({ ...wisata, nama_wisata: e.target.value })}
               />
             </div>
             <div>
               <label className="text-sm font-medium text-primary mb-1 block">Kategori</label>
-              <Select
-                value={wisata.kategori || undefined}
-                onValueChange={(val) => setWisata({ ...wisata, kategori: val })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih Kategori" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Alam">Alam</SelectItem>
-                  <SelectItem value="Water Park">Water Park</SelectItem>
-                  <SelectItem value="Playground">Playground</SelectItem>
-                  <SelectItem value="Budaya">Budaya</SelectItem>
-                  <SelectItem value="Edukasi">Edukasi</SelectItem>
-                  <SelectItem value="Kuliner">Kuliner</SelectItem>
-                  <SelectItem value="Religi">Religi</SelectItem>
-                  <SelectItem value="Lainnya">Lainnya</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input
+                value={wisata.kategori || ""}
+                onChange={(e) => setWisata({ ...wisata, kategori: e.target.value })}
+              />
             </div>
             <div>
               <label className="text-sm font-medium text-primary mb-1 block">Deskripsi</label>
@@ -212,7 +144,7 @@ export default function WisataEdit() {
                 placeholder="Deskripsi"
                 value={wisata.deskripsi || ""}
                 onChange={(e) => setWisata({ ...wisata, deskripsi: e.target.value })}
-                className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none"
               />
             </div>
           </CardContent>
@@ -252,58 +184,7 @@ export default function WisataEdit() {
                 ))}
               </SelectContent>
             </Select>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="text-sm font-medium text-primary mb-1 block">Nama Pengelola</label>
-                <Input
-                  placeholder="Nama Pengelola"
-                  value={pengelola.nama_pengelola || ""}
-                  onChange={(e) =>
-                    setPengelola({
-                      ...pengelola,
-                      nama_pengelola: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-primary mb-1 block">Kontak</label>
-                <Input
-                  placeholder="Kontak"
-                  value={pengelola.kontak || ""}
-                  onChange={(e) =>
-                    setPengelola({ ...pengelola, kontak: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-primary mb-1 block">Alamat</label>
-                <textarea
-                  placeholder="Alamat"
-                  value={pengelola.alamat || ""}
-                  onChange={(e) =>
-                    setPengelola({ ...pengelola, alamat: e.target.value })
-                  }
-                  className="border border-primary rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() =>
-                  setPengelola({
-                    id: null,
-                    nama_pengelola: "",
-                    kontak: "",
-                    alamat: "",
-                  })
-                }
-              >
-                Kosongkan Pengelola
-              </Button>
-            </div>
+            <div className="text-sm text-gray-600">Hanya dapat memilih dari daftar pengelola.</div>
           </CardContent>
         </Card>
 
@@ -336,43 +217,7 @@ export default function WisataEdit() {
                 ))}
               </SelectContent>
             </Select>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-primary mb-1 block">Nama Kecamatan</label>
-                <Input
-                  placeholder="Nama Kecamatan"
-                  value={kecamatan.nama_kecamatan || ""}
-                  onChange={(e) =>
-                    setKecamatan({
-                      ...kecamatan,
-                      nama_kecamatan: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-primary mb-1 block">Deskripsi</label>
-                <textarea
-                  placeholder="Deskripsi"
-                  value={kecamatan.deskripsi || ""}
-                  onChange={(e) =>
-                    setKecamatan({ ...kecamatan, deskripsi: e.target.value })
-                  }
-                  className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() =>
-                  setKecamatan({ id: null, nama_kecamatan: "", deskripsi: "" })
-                }
-              >
-                Kosongkan Kecamatan
-              </Button>
-            </div>
+            <div className="text-sm text-gray-600">Hanya dapat memilih dari daftar kecamatan.</div>
           </CardContent>
         </Card>
 

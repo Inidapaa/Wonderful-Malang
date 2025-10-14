@@ -1,4 +1,5 @@
 import LoginCard from "../components/admin/logincard";
+import Footer from "../global/footer.jsx";
 
 const Login = () => {
   return (

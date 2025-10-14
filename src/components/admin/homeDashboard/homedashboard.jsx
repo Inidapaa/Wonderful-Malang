@@ -159,10 +159,8 @@ export default function Wisata() {
     }
   };
 
-  // inline edit removed; we navigate to full edit page instead
-
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 font-display">
       <div className="flex items-center">
         <h1 className="text-3xl font-bold text-primary">Manajemen Wisata</h1>
       </div>
