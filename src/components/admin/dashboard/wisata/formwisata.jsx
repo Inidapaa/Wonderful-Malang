@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
-import { supabase } from "../../../../supabase-client.js";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { supabase } from "@/supabase-client";
 
-const FormWisata = () => {
+export default function CreateWisata() {
   const [formData, setFormData] = useState({
     nama_wisata: "",
     deskripsi: "",
@@ -9,70 +12,57 @@ const FormWisata = () => {
     kategori: "",
     harga_tiket: "",
     jam_operasional: "",
-    id_kecamatan: "",
-    id_pengelola: "",
   });
-  const [gambar, setGambar] = useState(null);
-  const [kecamatan, setKecamatan] = useState([]);
-  const [pengelola, setPengelola] = useState([]);
+  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // // Fetch dropdown data
-  useEffect(() => {
-    const fetchDropdowns = async () => {
-      const { data: kec } = await supabase.from("kecamatan").select("*");
-      const { data: peng } = await supabase.from("pengelola").select("*");
-      setKecamatan(kec || []);
-      setPengelola(peng || []);
-    };
-    fetchDropdowns();
-  }, []);
-
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
-  const handleImageUpload = async () => {
-    if (!gambar) return null;
-
-    const fileExt = gambar.name.split(".").pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    const { data: error } = await supabase.storage
-      .from("images") // folder di Supabase Storage
-      .upload(`wisata/${fileName}`, gambar);
-
-    if (error) {
-      console.error("Upload error:", error.message);
-      return null;
-    }
-
-    const { data: publicUrl } = supabase.storage
-      .from("images")
-      .getPublicUrl(`wisata/${fileName}`);
-
-    return publicUrl.publicUrl;
-  };
+  const handleFileChange = (e) => setFile(e.target.files[0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!file) return alert("Upload gambar dulu ya bro!");
+
     setLoading(true);
 
-    const imageUrl = await handleImageUpload();
+    // 🟦 1️⃣ Upload gambar ke Supabase Storage ("images" bucket)
+    const fileName = `${Date.now()}_${file.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("images")
+      .upload(fileName, file);
 
-    const { error } = await supabase.from("wisata").insert([
+    if (uploadError) {
+      console.error(uploadError);
+      alert("Upload gambar gagal.");
+      setLoading(false);
+      return;
+    }
+
+    // 🟩 2️⃣ Ambil public URL gambar
+    const { data: urlData } = supabase.storage
+      .from("images")
+      .getPublicUrl(fileName);
+    const imageUrl = urlData.publicUrl;
+
+    const { error: insertError } = await supabase.from("wisata").insert([
       {
         ...formData,
-        gambar: imageUrl,
-        created_at: new Date(),
+        harga_tiket: Number(formData.harga_tiket),
+        gambar: imageUrl, // simpan URL gambar
+        id_pengelola: null,
+        id_kecamatan: null,
       },
     ]);
 
-    setLoading(false);
-
-    if (error) {
-      alert("Gagal menyimpan data: " + error.message);
+    if (insertError) {
+      console.error(insertError);
+      alert(
+        `Gagal menyimpan data wisata: ${insertError.message || "Unknown error"}`
+      );
     } else {
-      alert("Data berhasil ditambahkan!");
+      alert("Wisata berhasil ditambahkan!");
       setFormData({
         nama_wisata: "",
         deskripsi: "",
@@ -80,121 +70,80 @@ const FormWisata = () => {
         kategori: "",
         harga_tiket: "",
         jam_operasional: "",
-        id_kecamatan: "",
-        id_pengelola: "",
       });
-      setGambar(null);
+      setFile(null);
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">
-      <h2 className="text-2xl font-semibold mb-6 text-center">
-        Tambah Data Wisata
-      </h2>
+    <div className="flex justify-center items-start min-h-[calc(100vh-2rem)] p-6">
+      <Card className="w-full max-w-2xl bg-white shadow-lg rounded-2xl border border-primary/20">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-primary text-center">
+            Tambah Wisata
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <Input
+              name="nama_wisata"
+              placeholder="Nama Wisata"
+              onChange={handleChange}
+              required
+            />
+            <Input
+              name="deskripsi"
+              placeholder="Deskripsi"
+              onChange={handleChange}
+              required
+            />
+            <Input
+              name="lokasi"
+              placeholder="Lokasi"
+              onChange={handleChange}
+              required
+            />
+            <Input
+              name="kategori"
+              placeholder="Kategori"
+              onChange={handleChange}
+              required
+            />
+            <Input
+              name="harga_tiket"
+              placeholder="Harga Tiket"
+              type="number"
+              onChange={handleChange}
+              required
+            />
+            <Input
+              name="jam_operasional"
+              placeholder="Jam Operasional"
+              onChange={handleChange}
+              required
+            />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="nama_wisata"
-          placeholder="Nama Wisata"
-          value={formData.nama_wisata}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-2"
-          required
-        />
-        <textarea
-          name="deskripsi"
-          placeholder="Deskripsi"
-          value={formData.deskripsi}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-2"
-          required
-        />
-        <input
-          type="text"
-          name="lokasi"
-          placeholder="Lokasi"
-          value={formData.lokasi}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-2"
-          required
-        />
-        <input
-          type="text"
-          name="kategori"
-          placeholder="Kategori"
-          value={formData.kategori}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-2"
-        />
-        <input
-          type="number"
-          name="harga_tiket"
-          placeholder="Harga Tiket"
-          value={formData.harga_tiket}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-2"
-        />
-        <input
-          type="text"
-          name="jam_operasional"
-          placeholder="Jam Operasional"
-          value={formData.jam_operasional}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-2"
-        />
+            {/* 🖼️ Upload Gambar */}
+            <div>
+              <label className="text-sm font-medium text-primary mb-1">
+                Upload Gambar
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="border border-primary rounded-xl p-2 w-full"
+              />
+            </div>
 
-        {/* Dropdown Kecamatan */}
-        <select
-          name="id_kecamatan"
-          value={formData.id_kecamatan}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-2"
-          required
-        >
-          <option value="">Pilih Kecamatan</option>
-          {kecamatan.map((k) => (
-            <option key={k.id_kecamatan} value={k.id_kecamatan}>
-              {k.nama_kecamatan}
-            </option>
-          ))}
-        </select>
-
-        {/* Dropdown Pengelola */}
-        <select
-          name="id_pengelola"
-          value={formData.id_pengelola}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-2"
-          required
-        >
-          <option value="">Pilih Pengelola</option>
-          {pengelola.map((p) => (
-            <option key={p.id_pengelola} value={p.id_pengelola}>
-              {p.nama_pengelola}
-            </option>
-          ))}
-        </select>
-
-        {/* Upload Gambar */}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setGambar(e.target.files[0])}
-          className="w-full border rounded-lg p-2"
-        />
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          {loading ? "Menyimpan..." : "Simpan Data"}
-        </button>
-      </form>
+            <Button type="submit" disabled={loading} className="bg-primary text-white w-full">
+              {loading ? "Menyimpan..." : "Simpan Wisata"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
-};
-
-export default FormWisata;
+}

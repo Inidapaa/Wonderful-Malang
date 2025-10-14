@@ -1,4 +1,5 @@
 import { Home, BookUser, MapPinned, TreePalm } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import {
   Sidebar,
@@ -15,22 +16,22 @@ import {
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/dashboard",
     icon: Home,
   },
   {
     title: "Wisata",
-    url: "#",
+    url: "/dashboard/formwisata",
     icon: TreePalm,
   },
   {
     title: "Pengelola",
-    url: "#",
+    url: "/dashboard/pengelola",
     icon: BookUser,
   },
   {
-    title: "Alamat",
-    url: "#",
+    title: "Kecamatan",
+    url: "/dashboard/kecamatan",
     icon: MapPinned,
   },
 ];
@@ -49,12 +50,12 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    className="text-white hover:shadow-glowing hover:bg-white transition duration-100 hover:-translate-y-1.5 gap-10"
+                    className="text-white text-xl hover:shadow-glowing hover:bg-white transition duration-100 gap-10 mt-5"
                   >
-                    <a href={item.url}>
-                      <item.icon />
+                    <Link to={item.url}>
+                      <item.icon size={100} />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
