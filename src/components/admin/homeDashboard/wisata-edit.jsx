@@ -175,27 +175,46 @@ export default function WisataEdit() {
             <CardTitle className="text-xl text-primary">Form Wisata</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <Input
-              placeholder="Nama Wisata"
-              value={wisata.nama_wisata || ""}
-              onChange={(e) =>
-                setWisata({ ...wisata, nama_wisata: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Kategori"
-              value={wisata.kategori || ""}
-              onChange={(e) =>
-                setWisata({ ...wisata, kategori: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Deskripsi"
-              value={wisata.deskripsi || ""}
-              onChange={(e) =>
-                setWisata({ ...wisata, deskripsi: e.target.value })
-              }
-            />
+            <div>
+              <label className="text-sm font-medium text-primary mb-1 block">Nama Wisata</label>
+              <Input
+                placeholder="Nama Wisata"
+                value={wisata.nama_wisata || ""}
+                onChange={(e) =>
+                  setWisata({ ...wisata, nama_wisata: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-primary mb-1 block">Kategori</label>
+              <Select
+                value={wisata.kategori || undefined}
+                onValueChange={(val) => setWisata({ ...wisata, kategori: val })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih Kategori" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Alam">Alam</SelectItem>
+                  <SelectItem value="Water Park">Water Park</SelectItem>
+                  <SelectItem value="Playground">Playground</SelectItem>
+                  <SelectItem value="Budaya">Budaya</SelectItem>
+                  <SelectItem value="Edukasi">Edukasi</SelectItem>
+                  <SelectItem value="Kuliner">Kuliner</SelectItem>
+                  <SelectItem value="Religi">Religi</SelectItem>
+                  <SelectItem value="Lainnya">Lainnya</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-primary mb-1 block">Deskripsi</label>
+              <textarea
+                placeholder="Deskripsi"
+                value={wisata.deskripsi || ""}
+                onChange={(e) => setWisata({ ...wisata, deskripsi: e.target.value })}
+                className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -205,6 +224,7 @@ export default function WisataEdit() {
             <CardTitle className="text-xl text-primary">Pengelola</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
+            <label className="text-sm font-medium text-primary mb-1 block">Pilih Pengelola (opsional)</label>
             <Select
               value={pengelola?.id ? String(pengelola.id) : undefined}
               onValueChange={(val) => {
@@ -233,30 +253,40 @@ export default function WisataEdit() {
               </SelectContent>
             </Select>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Input
-                placeholder="Nama Pengelola"
-                value={pengelola.nama_pengelola || ""}
-                onChange={(e) =>
-                  setPengelola({
-                    ...pengelola,
-                    nama_pengelola: e.target.value,
-                  })
-                }
-              />
-              <Input
-                placeholder="Kontak"
-                value={pengelola.kontak || ""}
-                onChange={(e) =>
-                  setPengelola({ ...pengelola, kontak: e.target.value })
-                }
-              />
-              <Input
-                placeholder="Alamat"
-                value={pengelola.alamat || ""}
-                onChange={(e) =>
-                  setPengelola({ ...pengelola, alamat: e.target.value })
-                }
-              />
+              <div>
+                <label className="text-sm font-medium text-primary mb-1 block">Nama Pengelola</label>
+                <Input
+                  placeholder="Nama Pengelola"
+                  value={pengelola.nama_pengelola || ""}
+                  onChange={(e) =>
+                    setPengelola({
+                      ...pengelola,
+                      nama_pengelola: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-primary mb-1 block">Kontak</label>
+                <Input
+                  placeholder="Kontak"
+                  value={pengelola.kontak || ""}
+                  onChange={(e) =>
+                    setPengelola({ ...pengelola, kontak: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-primary mb-1 block">Alamat</label>
+                <textarea
+                  placeholder="Alamat"
+                  value={pengelola.alamat || ""}
+                  onChange={(e) =>
+                    setPengelola({ ...pengelola, alamat: e.target.value })
+                  }
+                  className="border border-primary rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              </div>
             </div>
             <div className="flex justify-end">
               <Button
@@ -283,6 +313,7 @@ export default function WisataEdit() {
             <CardTitle className="text-xl text-primary">Kecamatan</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
+            <label className="text-sm font-medium text-primary mb-1 block">Pilih Kecamatan (opsional)</label>
             <Select
               value={kecamatan?.id ? String(kecamatan.id) : undefined}
               onValueChange={(val) => {
@@ -306,23 +337,30 @@ export default function WisataEdit() {
               </SelectContent>
             </Select>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                placeholder="Nama Kecamatan"
-                value={kecamatan.nama_kecamatan || ""}
-                onChange={(e) =>
-                  setKecamatan({
-                    ...kecamatan,
-                    nama_kecamatan: e.target.value,
-                  })
-                }
-              />
-              <Input
-                placeholder="Deskripsi"
-                value={kecamatan.deskripsi || ""}
-                onChange={(e) =>
-                  setKecamatan({ ...kecamatan, deskripsi: e.target.value })
-                }
-              />
+              <div>
+                <label className="text-sm font-medium text-primary mb-1 block">Nama Kecamatan</label>
+                <Input
+                  placeholder="Nama Kecamatan"
+                  value={kecamatan.nama_kecamatan || ""}
+                  onChange={(e) =>
+                    setKecamatan({
+                      ...kecamatan,
+                      nama_kecamatan: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-primary mb-1 block">Deskripsi</label>
+                <textarea
+                  placeholder="Deskripsi"
+                  value={kecamatan.deskripsi || ""}
+                  onChange={(e) =>
+                    setKecamatan({ ...kecamatan, deskripsi: e.target.value })
+                  }
+                  className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              </div>
             </div>
             <div className="flex justify-end">
               <Button

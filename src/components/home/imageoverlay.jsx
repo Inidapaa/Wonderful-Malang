@@ -1,78 +1,88 @@
-import Image1 from "../../assets/bglandingpage.jpg";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { supabase } from "@/supabase-client";
 
 const ImageOverlay = () => {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from("wisata")
+        .select("id, nama_wisata, deskripsi, gambar")
+        .order("id", { ascending: false })
+        .limit(6);
+      setItems(data || []);
+      setLoading(false);
+    };
+    load();
+  }, []);
+
   return (
-    <>
-      <div class="flex items-center justify-center col-span-2">
-        <div class="overflow-hidden h-150 w-320 cursor-pointer rounded-xl relative group">
-          <div class="rounded-xl z-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-primary/80 to-transparent bg-gradient-to-t inset-x-0 -bottom-2 pt-30 text-white flex items-end">
-            <div>
-              <div class="transform-gpu p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
-                <div class="font-bold">Jessie Watsica</div>
+    <section className="w-full rounded-3xl bg-primary text-white">
+      <div className="max-w-6xl mx-auto flex flex-col gap-6">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-wider text-white">
+              Best Locations
+            </p>
+            <h2 className="text-2xl md:text-4xl font-extrabold text-white">
+              To Explore in <span className="text-blue-400">Malang</span>
+            </h2>
+          </div>
+          <p className="max-w-2xl text-sm md:text-base text-white">
+            Temukan destinasi terbaik di Malang. Dari pesona alam, budaya hingga
+            kuliner, pilihan ini diracik untuk semua tipe pelancong.
+          </p>
+        </div>
 
-                <div class="opacity-60 text-sm ">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Distinctio dolores error iure, perferendis sequi totam. Ad
-                  aliquam aperiam atque deleniti dolor dolorem enim esse et in,
-                  inventore itaque, pariatur reprehenderit.
+        {loading ? (
+          <div className="py-16 text-center text-white/60">Memuat...</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((it, idx) => (
+              <div
+                key={it.id}
+                className={`overflow-hidden rounded-xl relative group shadow-lg border border-primary/10 bg-white/5 ${
+                  idx === 0
+                    ? "sm:col-span-2 lg:col-span-2 lg:row-span-2 h-[460px]"
+                    : "h-[220px]"
+                }`}
+              >
+                <div className="absolute inset-0">
+                  <img
+                    alt={it.nama_wisata || "Wisata"}
+                    src={it.gambar}
+                    className="object-cover object-center w-full h-full group-hover:scale-105 transition duration-300 ease-in-out"
+                  />
+                </div>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent p-4 md:p-5 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition duration-300 ease-in-out">
+                  <div className="space-y-1">
+                    <div className="font-semibold text-base md:text-lg line-clamp-1">
+                      {it.nama_wisata}
+                    </div>
+                    <div className="opacity-90 text-xs md:text-sm line-clamp-2">
+                      {it.deskripsi}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
-          <img
-            alt=""
-            class="object-cover object-center w-full h-full group-hover:scale-110 transition duration-300 ease-in-out"
-            src={Image1}
-          />
-        </div>
-      </div>
-      <div class="flex items-center justify-center">
-        <div class="overflow-hidden h-150 w-150 cursor-pointer rounded-xl relative group">
-          <div class="rounded-xl z-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-primary/80 to-transparent bg-gradient-to-t inset-x-0 -bottom-2 pt-30 text-white flex items-end">
-            <div>
-              <div class="transform-gpu  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
-                <div class="font-bold">Jessie Watsica</div>
+        )}
 
-                <div class="opacity-60 text-sm ">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Distinctio dolores error iure, perferendis sequi totam. Ad
-                  aliquam aperiam atque deleniti dolor dolorem enim esse et in,
-                  inventore itaque, pariatur reprehenderit.
-                </div>
-              </div>
-            </div>
-          </div>
-          <img
-            alt=""
-            class="object-cover object-center w-full h-full group-hover:scale-110 transition duration-300 ease-in-out"
-            src={Image1}
-          />
+        <div className="flex justify-center pt-2">
+          <Link
+            to="/discovery"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white/10 px-5 py-2 text-sm hover:bg-primary/20 transition"
+          >
+            Lihat Selengkapnya
+          </Link>
         </div>
       </div>
-      <div class="flex items-center justify-center">
-        <div class="overflow-hidden h-150 w-150 cursor-pointer rounded-xl relative group">
-          <div class="rounded-xl z-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-primary/80 to-transparent bg-gradient-to-t inset-x-0 -bottom-2 pt-30 text-white flex items-end">
-            <div>
-              <div class="transform-gpu  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
-                <div class="font-bold">Jessie Watsica</div>
-
-                <div class="opacity-60 text-sm ">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Distinctio dolores error iure, perferendis sequi totam. Ad
-                  aliquam aperiam atque deleniti dolor dolorem enim esse et in,
-                  inventore itaque, pariatur reprehenderit.
-                </div>
-              </div>
-            </div>
-          </div>
-          <img
-            alt=""
-            class="object-cover object-center w-full h-full group-hover:scale-110 transition duration-300 ease-in-out"
-            src={Image1}
-          />
-        </div>
-      </div>
-    </>
+    </section>
   );
 };
 

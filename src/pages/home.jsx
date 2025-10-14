@@ -29,12 +29,12 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className="bg-primary h-full w-full py-20 flex flex-col justify-center items-center">
+      <section className="bg-primary h-full w-full flex flex-col items-center justify-center font-display gap-30 py-20">
         <Card />
       </section>
       <section className="bg-primary h-full w-full flex flex-col items-center justify-center font-display gap-30 py-20">
         <h1 className="text-7xl text-white font-bold">Wisata Terbaru</h1>
-        <div className=" grid grid-cols-2 justify-center gap-20">
+        <div className="">
           <ImageOverlay />
         </div>
       </section>
