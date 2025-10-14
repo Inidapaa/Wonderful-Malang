@@ -1,37 +1,35 @@
 import { Button } from "@/components/ui/button";
 import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { useEffect, useState } from "react";
 import { supabase } from "@/supabase-client";
 
 const HoverUser = () => {
-	const [items, setItems] = useState([]);
-	const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		const load = async () => {
-			setLoading(true);
-			const { data } = await supabase
-				.from("pengelola")
-				.select("id, nama_pengelola, deskripsi")
-				.order("id", { ascending: false })
-				.limit(5);
-			setItems(data || []);
-			setLoading(false);
-		};
-		load();
-	}, []);
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from("pengelola")
+        .select("id, nama_pengelola, deskripsi")
+        .order("id", { ascending: false })
+        .limit(5);
+      setItems(data || []);
+      setLoading(false);
+    };
+    load();
+  }, []);
 
-	return (
-		<>
-			<div className="w-full flex justify-center items-center">
-	        <div className="flex flex-wrap gap-10 md:gap-25 justify-center items-center">
-          {loading && (
-            <div className="col-span-full text-white">Memuat...</div>
-          )}
+  return (
+    <>
+      <div className="w-full flex justify-center items-center">
+        <div className="flex flex-wrap gap-10 md:gap-25 justify-center items-center">
+          {loading && <div className="col-span-full text-white">Memuat...</div>}
           {!loading && items.length === 0 && (
             <div className="col-span-full text-white">Belum ada data</div>
           )}
@@ -42,7 +40,10 @@ const HoverUser = () => {
                   asChild
                   className="bg-white flex justify-center items-center h-20 w-45 hover:shadow-glowing transition-all duration-1000"
                 >
-                  <Button className="text-black font-bold p-3 flex-wrap uppercase" variant="link">
+                  <Button
+                    className="text-black font-bold p-3 flex-wrap uppercase"
+                    variant="link"
+                  >
                     {p.nama_pengelola}
                   </Button>
                 </HoverCardTrigger>
@@ -54,15 +55,14 @@ const HoverUser = () => {
                     <p className="text-sm text-gray-700">
                       {p.deskripsi || "Tidak ada deskripsi"}
                     </p>
-                    {/* timestamp removed per request */}
                   </div>
                 </HoverCardContent>
               </HoverCard>
             ))}
         </div>
       </div>
-		</>
-	);
+    </>
+  );
 };
 
 export default HoverUser;

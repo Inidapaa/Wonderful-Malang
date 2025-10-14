@@ -301,7 +301,6 @@ export default function Wisata() {
         </CardContent>
       </Card>
 
-      {/* Inline edit panel removed; using dedicated edit page */}
     </div>
   );
 }

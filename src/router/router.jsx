@@ -44,7 +44,6 @@ export const router = createBrowserRouter([
       { path: "edit/:id", element: <WisataEdit /> },
     ],
   },
-  // legacy route removed (tambahwisata page no longer exists)
   {
     path: "*",
     element: <NotFound />,

@@ -148,15 +148,15 @@ export default function CreatePengelola() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-6 min-h-[calc(100vh-2rem)] font-display">
+    <div className="flex flex-col gap-6 p-6 md:p-8 min-h-[calc(100vh-2rem)] font-display">
       <div className="w-full max-w-5xl mx-auto flex justify-end">
         <Button className="bg-primary text-white" onClick={() => setCreateOpen(true)}>
           Create Pengelola
         </Button>
       </div>
       <Card className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-2xl border border-primary/20">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold text-primary">
+        <CardHeader className="p-4 md:p-6">
+          <CardTitle className="text-lg md:text-xl font-bold text-primary">
             Data Pengelola
           </CardTitle>
         </CardHeader>
@@ -226,7 +226,7 @@ export default function CreatePengelola() {
           <SheetHeader>
             <SheetTitle>Tambah Data Pengelola</SheetTitle>
           </SheetHeader>
-          <div className="p-4">
+          <div className="p-4 md:p-6">
             <form
               onSubmit={async (e) => {
                 await handleSubmit(e);
@@ -288,7 +288,7 @@ export default function CreatePengelola() {
           <SheetHeader>
             <SheetTitle>Edit Pengelola</SheetTitle>
           </SheetHeader>
-          <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div>
               <label className="text-sm font-medium text-primary mb-1 block">Nama Pengelola</label>
               <Input
@@ -308,7 +308,7 @@ export default function CreatePengelola() {
               <textarea
                 value={editData.alamat}
                 onChange={(e) => setEditData({ ...editData, alamat: e.target.value })}
-                className="border border-primary rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="border border-primary rounded-xl p-3 w-full min-h-[100px] md:min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
             <div className="md:col-span-2">
@@ -316,7 +316,7 @@ export default function CreatePengelola() {
               <textarea
                 value={editData.deskripsi}
                 onChange={(e) => setEditData({ ...editData, deskripsi: e.target.value })}
-                className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="border border-primary rounded-xl p-3 w-full min-h-[120px] md:min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
           </div>

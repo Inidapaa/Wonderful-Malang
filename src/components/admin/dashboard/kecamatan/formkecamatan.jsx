@@ -224,7 +224,6 @@ export default function CreateKecamatan() {
           </div>
         </CardContent>
       </Card>
-      {/* Create Kecamatan Sheet */}
       <Sheet open={createOpen} onOpenChange={setCreateOpen}>
         <SheetContent side="center" className="bg-white">
           <SheetHeader>
