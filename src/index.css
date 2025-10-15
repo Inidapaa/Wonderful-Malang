@@ -2,6 +2,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

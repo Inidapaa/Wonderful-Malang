@@ -17,7 +17,7 @@ import HomeDashboard from "@/components/admin/homeDashboard/homedashboard";
 import CreateWisata from "@/components/admin/dashboard/wisata/formwisata";
 import CreatePengelola from "@/components/admin/dashboard/pengelola/formpengelola";
 import CreateKecamatan from "@/components/admin/dashboard/kecamatan/formkecamatan";
-import WisataEdit from "@/components/admin/homeDashboard/wisata-edit";
+import WisataEdit from "@/components/admin/homeDashboard/wisataedit";
 
 export const router = createBrowserRouter([
   {

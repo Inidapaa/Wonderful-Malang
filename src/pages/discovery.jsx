@@ -35,7 +35,6 @@ export default function DiscoveryPage() {
   const [total, setTotal] = useState(0);
   const limit = 9;
 
-  // Hide global scrollbar while on this page
   useEffect(() => {
     document.documentElement.classList.add("no-scrollbar");
     document.body.classList.add("no-scrollbar");
@@ -78,7 +77,6 @@ export default function DiscoveryPage() {
     if (kat && kat !== "__ALL__") q = q.eq("kategori", kat);
     if (kid && kid !== "__ALL__") q = q.eq("id_kecamatan", Number(kid));
     if (text) {
-      // search in name or description
       q = q.or(`nama_wisata.ilike.%${text}%,deskripsi.ilike.%${text}%`);
     }
     const offset = (pg - 1) * limit;
@@ -96,7 +94,6 @@ export default function DiscoveryPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Refetch when filters/search change (debounced) and reset to page 1
   useEffect(() => {
     const t = setTimeout(() => {
       setPage(1);
@@ -106,7 +103,6 @@ export default function DiscoveryPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, kategori, kecamatanId]);
 
-  // Refetch when page changes (no debounce)
   useEffect(() => {
     fetchItems({ pg: page });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,7 +110,6 @@ export default function DiscoveryPage() {
 
   const openDetail = async (w) => {
     // setOpening(true);
-    // fetch related details
     const [peng, kec] = await Promise.all([
       w?.id_pengelola
         ? supabase
@@ -143,7 +138,7 @@ export default function DiscoveryPage() {
   return (
     <>
       <Navbar />{" "}
-      <div className="min-h-screen w-full bg-primary overflow-y-scroll no-scrollbar pt-20 transition duration-200">
+      <div className="min-h-screen w-full bg-primary overflow-y-scroll no-scrollbar pt-20 transition duration-200 font-display">
         <section className="w-full bg-primary text-white">
           <div className="max-w-6xl mx-auto px-6 py-14 md:py-20">
             <h1 className="text-3xl md:text-5xl font-extrabold font-display">
@@ -156,7 +151,6 @@ export default function DiscoveryPage() {
             </p>
           </div>
         </section>
-
         <section className="w-full">
           <div className="max-w-6xl mx-auto px-6 pb-16">
             <div className="mb-6 space-y-3">
@@ -171,7 +165,6 @@ export default function DiscoveryPage() {
                   className="w-full h-10 outline-none bg-transparent text-sm"
                 />
               </div>
-
               <div>
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="flex items-center gap-2">
@@ -380,7 +373,6 @@ export default function DiscoveryPage() {
                   <div className="text-gray-700 text-sm leading-relaxed bg-gray-50 rounded-xl p-3 border whitespace-pre-line">
                     {selected.wisata.deskripsi || "Tidak ada deskripsi"}
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-gray-50 rounded-xl p-4 border">
                       <h4 className="font-semibold text-primary mb-2">
@@ -427,11 +419,18 @@ export default function DiscoveryPage() {
                       )}
                     </div>
                   </div>
-
                   <div className="flex flex-wrap items-center gap-3 pt-2">
                     {selected.wisata.harga_tiket && (
                       <span className="text-xs bg-white border rounded-full px-3 py-1 text-gray-700">
-                        Harga tiket: {selected.wisata.harga_tiket}
+                        {(() => {
+                          const val = String(
+                            selected.wisata.harga_tiket
+                          ).trim();
+                          const prefixed = /^\s*rp\.?/i.test(val)
+                            ? val
+                            : `Rp${val}`;
+                          return `Harga tiket: ${prefixed}`;
+                        })()}
                       </span>
                     )}
                     {selected.wisata.jam_operasional && (
@@ -440,7 +439,6 @@ export default function DiscoveryPage() {
                       </span>
                     )}
                   </div>
-
                   <div className="flex justify-end gap-3">
                     <Button variant="outline" onClick={closeDetail}>
                       Tutup

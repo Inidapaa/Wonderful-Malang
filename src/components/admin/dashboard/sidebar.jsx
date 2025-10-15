@@ -1,5 +1,7 @@
-import { Home, BookUser, MapPinned, TreePalm } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Home, BookUser, MapPinned, TreePalm, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { supabase } from "@/supabase-client";
 
 import {
   Sidebar,
@@ -37,6 +39,14 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const navigate = useNavigate();
+  const [loggingOut, setLoggingOut] = useState(false);
+  const handleLogout = async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    await supabase.auth.signOut().catch(() => {});
+    navigate("/adminlogin", { replace: true });
+  };
   return (
     <Sidebar className="font-display">
       <SidebarContent className=" bg-primary">
@@ -59,6 +69,16 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={handleLogout}
+                  disabled={loggingOut}
+                  className="text-white text-xl hover:shadow-glowing hover:bg-white transition duration-100 gap-10 mt-5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <LogOut size={100} />
+                  <span>{loggingOut ? "Tunggu..." : "Log out"}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -63,7 +63,12 @@ export default function CreatePengelola() {
 
     if (!error) {
       alert("Data pengelola berhasil disimpan!");
-      setFormData({ nama_pengelola: "", kontak: "", alamat: "", deskripsi: "" });
+      setFormData({
+        nama_pengelola: "",
+        kontak: "",
+        alamat: "",
+        deskripsi: "",
+      });
       const { data } = await supabase
         .from("pengelola")
         .select("id, nama_pengelola, kontak, alamat, deskripsi")
@@ -117,12 +122,12 @@ export default function CreatePengelola() {
 
   const removeOne = async (id) => {
     if (!confirm("Hapus pengelola ini beserta wisata terkait?")) return;
-    // find wisata referencing this pengelola
+
     const { data: wisataRows } = await supabase
       .from("wisata")
       .select("id, gambar")
       .eq("id_pengelola", id);
-    // delete images
+
     const filePaths = (wisataRows || [])
       .map((r) =>
         typeof r.gambar === "string" ? r.gambar.split("/images/")[1] : null
@@ -130,7 +135,7 @@ export default function CreatePengelola() {
       .filter(Boolean);
     if (filePaths.length)
       await supabase.storage.from("images").remove(filePaths);
-    // delete wisata rows
+
     if ((wisataRows || []).length)
       await supabase
         .from("wisata")
@@ -139,7 +144,7 @@ export default function CreatePengelola() {
           "id",
           (wisataRows || []).map((w) => w.id)
         );
-    // delete pengelola
+
     const { error } = await supabase.from("pengelola").delete().eq("id", id);
     if (!error) {
       await refreshList();
@@ -150,7 +155,10 @@ export default function CreatePengelola() {
   return (
     <div className="flex flex-col gap-6 p-6 md:p-8 min-h-[calc(100vh-2rem)] font-display">
       <div className="w-full max-w-5xl mx-auto flex justify-end">
-        <Button className="bg-primary text-white" onClick={() => setCreateOpen(true)}>
+        <Button
+          className="bg-primary text-white"
+          onClick={() => setCreateOpen(true)}
+        >
           Create Pengelola
         </Button>
       </div>
@@ -183,8 +191,18 @@ export default function CreatePengelola() {
                     </TableCell>
                     <TableCell>{p.nama_pengelola}</TableCell>
                     <TableCell>{p.kontak}</TableCell>
-                    <TableCell className="max-w-[280px] truncate" title={p.alamat || ""}>{p.alamat}</TableCell>
-                    <TableCell className="max-w-[320px] truncate" title={p.deskripsi || ""}>{p.deskripsi}</TableCell>
+                    <TableCell
+                      className="max-w-[280px] truncate"
+                      title={p.alamat || ""}
+                    >
+                      {p.alamat}
+                    </TableCell>
+                    <TableCell
+                      className="max-w-[320px] truncate"
+                      title={p.deskripsi || ""}
+                    >
+                      {p.deskripsi}
+                    </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                         <button
@@ -220,7 +238,6 @@ export default function CreatePengelola() {
           </div>
         </CardContent>
       </Card>
-      {/* Create Pengelola Sheet */}
       <Sheet open={createOpen} onOpenChange={setCreateOpen}>
         <SheetContent side="center" className="bg-white">
           <SheetHeader>
@@ -239,7 +256,7 @@ export default function CreatePengelola() {
               </label>
               <Input
                 name="nama_pengelola"
-                placeholder="Nama Pengelola"
+                placeholder=""
                 onChange={handleChange}
                 required
               />
@@ -248,7 +265,7 @@ export default function CreatePengelola() {
               </label>
               <Input
                 name="kontak"
-                placeholder="Kontak"
+                placeholder="083123456789"
                 onChange={handleChange}
                 required
               />
@@ -257,9 +274,9 @@ export default function CreatePengelola() {
               </label>
               <textarea
                 name="alamat"
-                placeholder="Alamat"
+                placeholder=""
                 onChange={handleChange}
-                className="border border-primary rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="border  rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
                 required
               />
               <label className="text-sm font-medium text-primary mb-1 block">
@@ -267,16 +284,20 @@ export default function CreatePengelola() {
               </label>
               <textarea
                 name="deskripsi"
-                placeholder="Deskripsi"
+                placeholder=""
                 onChange={handleChange}
-                className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="border  rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
               <SheetFooter>
                 <div className="flex justify-end gap-2 w-full">
                   <SheetClose asChild>
-                    <Button variant="outline" type="button">Batal</Button>
+                    <Button variant="outline" type="button">
+                      Batal
+                    </Button>
                   </SheetClose>
-                  <Button className="bg-primary text-white" type="submit">Simpan</Button>
+                  <Button className="bg-primary text-white" type="submit">
+                    Simpan
+                  </Button>
                 </div>
               </SheetFooter>
             </form>
@@ -290,42 +311,66 @@ export default function CreatePengelola() {
           </SheetHeader>
           <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div>
-              <label className="text-sm font-medium text-primary mb-1 block">Nama Pengelola</label>
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Nama Pengelola
+              </label>
               <Input
                 value={editData.nama_pengelola}
-                onChange={(e) => setEditData({ ...editData, nama_pengelola: e.target.value })}
+                onChange={(e) =>
+                  setEditData({ ...editData, nama_pengelola: e.target.value })
+                }
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-primary mb-1 block">Kontak</label>
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Kontak
+              </label>
               <Input
                 value={editData.kontak}
-                onChange={(e) => setEditData({ ...editData, kontak: e.target.value })}
+                onChange={(e) =>
+                  setEditData({ ...editData, kontak: e.target.value })
+                }
               />
             </div>
             <div className="md:col-span-2">
-              <label className="text-sm font-medium text-primary mb-1 block">Alamat</label>
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Alamat
+              </label>
               <textarea
                 value={editData.alamat}
-                onChange={(e) => setEditData({ ...editData, alamat: e.target.value })}
-                className="border border-primary rounded-xl p-3 w-full min-h-[100px] md:min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                onChange={(e) =>
+                  setEditData({ ...editData, alamat: e.target.value })
+                }
+                className="border  rounded-xl p-3 w-full min-h-[100px] md:min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="text-sm font-medium text-primary mb-1 block">Deskripsi</label>
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Deskripsi
+              </label>
               <textarea
                 value={editData.deskripsi}
-                onChange={(e) => setEditData({ ...editData, deskripsi: e.target.value })}
-                className="border border-primary rounded-xl p-3 w-full min-h-[120px] md:min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                onChange={(e) =>
+                  setEditData({ ...editData, deskripsi: e.target.value })
+                }
+                className="border  rounded-xl p-3 w-full min-h-[120px] md:min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
           </div>
           <SheetFooter>
             <div className="flex justify-end gap-2 w-full">
               <SheetClose asChild>
-                <Button variant="outline" type="button" onClick={cancelEdit}>Batal</Button>
+                <Button variant="outline" type="button" onClick={cancelEdit}>
+                  Batal
+                </Button>
               </SheetClose>
-              <Button className="bg-primary text-white" type="button" onClick={saveEdit}>Simpan</Button>
+              <Button
+                className="bg-primary text-white"
+                type="button"
+                onClick={saveEdit}
+              >
+                Simpan
+              </Button>
             </div>
           </SheetFooter>
         </SheetContent>

@@ -57,7 +57,6 @@ export default function CreateWisata() {
 
     setLoading(true);
 
-    // 🟦 1️⃣ Upload gambar ke Supabase Storage ("images" bucket)
     const fileName = `${Date.now()}_${file.name}`;
     const { error: uploadError } = await supabase.storage
       .from("images")
@@ -70,7 +69,6 @@ export default function CreateWisata() {
       return;
     }
 
-    // 🟩 2️⃣ Ambil public URL gambar
     const { data: urlData } = supabase.storage
       .from("images")
       .getPublicUrl(fileName);
@@ -79,8 +77,8 @@ export default function CreateWisata() {
     const { error: insertError } = await supabase.from("wisata").insert([
       {
         ...formData,
-        harga_tiket: Number(formData.harga_tiket),
-        gambar: imageUrl, // simpan URL gambar
+        harga_tiket: formData.harga_tiket,
+        gambar: imageUrl,
         id_pengelola: selectedPengelola ? Number(selectedPengelola) : null,
         id_kecamatan: selectedKecamatan ? Number(selectedKecamatan) : null,
       },
@@ -124,7 +122,12 @@ export default function CreateWisata() {
               <label className="text-sm font-medium text-primary mb-1 block">
                 Nama Wisata
               </label>
-              <Input name="nama_wisata" onChange={handleChange} required />
+              <Input
+                name="nama_wisata"
+                value={formData.nama_wisata}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div>
               <label className="text-sm font-medium text-primary mb-1 block">
@@ -132,6 +135,7 @@ export default function CreateWisata() {
               </label>
               <textarea
                 name="deskripsi"
+                value={formData.deskripsi}
                 onChange={handleChange}
                 required
                 className="border rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -144,6 +148,7 @@ export default function CreateWisata() {
               <Input
                 name="lokasi"
                 placeholder="Kab. Malang/Malang"
+                value={formData.lokasi}
                 onChange={handleChange}
                 required
               />
@@ -178,7 +183,8 @@ export default function CreateWisata() {
               <Input
                 name="harga_tiket"
                 placeholder="12.000"
-                type="number"
+                type="text"
+                value={formData.harga_tiket}
                 onChange={handleChange}
                 required
               />
@@ -190,6 +196,7 @@ export default function CreateWisata() {
               <Input
                 name="jam_operasional"
                 placeholder="08:00-16:00"
+                value={formData.jam_operasional}
                 onChange={handleChange}
                 required
               />
@@ -246,7 +253,7 @@ export default function CreateWisata() {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-            key={fileKey}
+                key={fileKey}
                 className="border border-primary bg-primary/20 rounded-xl p-2 w-full"
               />
             </div>

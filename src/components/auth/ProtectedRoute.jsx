@@ -11,13 +11,21 @@ export default function ProtectedRoute({ children }) {
     const check = async () => {
       const { data: userData } = await supabase.auth.getUser();
       if (!mounted) return;
-      setAuthed(!!userData?.user);
+      const hasUser = !!userData?.user;
+      if (!hasUser) {
+        await supabase.auth.signOut().catch(() => {});
+      }
+      setAuthed(hasUser);
       setChecking(false);
     };
     check();
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return;
-      setAuthed(!!session?.user);
+      const hasUser = !!session?.user;
+      if (!hasUser) {
+        supabase.auth.signOut().catch(() => {});
+      }
+      setAuthed(hasUser);
     });
     return () => {
       mounted = false;
@@ -28,5 +36,3 @@ export default function ProtectedRoute({ children }) {
   if (checking) return null;
   return authed ? children : <Navigate to="/adminlogin" replace />;
 }
-
-

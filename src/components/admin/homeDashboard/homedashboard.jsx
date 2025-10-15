@@ -86,7 +86,6 @@ export default function Wisata() {
     if (selected.size === 0) return;
     if (!confirm(`Hapus ${selected.size} data?`)) return;
     const ids = Array.from(selected);
-    // collect referenced parents before delete
     const pengIds = new Set(
       rows
         .filter((r) => ids.includes(r.id))
@@ -99,7 +98,6 @@ export default function Wisata() {
         .map((r) => r.id_kecamatan)
         .filter(Boolean)
     );
-    // remove images from storage (if any)
     const filePaths = rows
       .filter((r) => ids.includes(r.id))
       .map((r) => r.gambar)
@@ -118,7 +116,6 @@ export default function Wisata() {
 
   const removeOne = async (id) => {
     if (!confirm("Hapus data ini?")) return;
-    // remove image first
     const row = rows.find((r) => r.id === id);
     const filePath =
       row?.gambar && typeof row.gambar === "string"
@@ -137,7 +134,6 @@ export default function Wisata() {
   };
 
   const cleanupOrphans = async (pengIds, kecIds) => {
-    // delete pengelola with no more wisata
     for (const pid of Array.from(pengIds)) {
       const { count, error } = await supabase
         .from("wisata")
@@ -147,7 +143,6 @@ export default function Wisata() {
         await supabase.from("pengelola").delete().eq("id", pid);
       }
     }
-    // delete kecamatan with no more wisata
     for (const kid of Array.from(kecIds)) {
       const { count, error } = await supabase
         .from("wisata")
@@ -300,7 +295,6 @@ export default function Wisata() {
           </div>
         </CardContent>
       </Card>
-
     </div>
   );
 }

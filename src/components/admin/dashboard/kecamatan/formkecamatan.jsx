@@ -68,7 +68,12 @@ export default function CreateKecamatan() {
     }
 
     alert("Data kecamatan berhasil disimpan!");
-    setFormData({ nama_kecamatan: "", alamat: "", deskripsi: "", kode_pos: "" });
+    setFormData({
+      nama_kecamatan: "",
+      alamat: "",
+      deskripsi: "",
+      kode_pos: "",
+    });
     const { data } = await supabase
       .from("kecamatan")
       .select("id, nama_kecamatan, alamat, deskripsi, kode_pos")
@@ -97,7 +102,12 @@ export default function CreateKecamatan() {
 
   const cancelEdit = () => {
     setEditingId(null);
-    setEditData({ nama_kecamatan: "", alamat: "", deskripsi: "", kode_pos: "" });
+    setEditData({
+      nama_kecamatan: "",
+      alamat: "",
+      deskripsi: "",
+      kode_pos: "",
+    });
     setEditOpen(false);
   };
 
@@ -121,12 +131,12 @@ export default function CreateKecamatan() {
 
   const removeOne = async (id) => {
     if (!confirm("Hapus kecamatan ini beserta wisata terkait?")) return;
-    // find wisata referencing this kecamatan
+
     const { data: wisataRows } = await supabase
       .from("wisata")
       .select("id, gambar")
       .eq("id_kecamatan", id);
-    // delete images
+
     const filePaths = (wisataRows || [])
       .map((r) =>
         typeof r.gambar === "string" ? r.gambar.split("/images/")[1] : null
@@ -134,7 +144,7 @@ export default function CreateKecamatan() {
       .filter(Boolean);
     if (filePaths.length)
       await supabase.storage.from("images").remove(filePaths);
-    // delete wisata rows
+
     if ((wisataRows || []).length)
       await supabase
         .from("wisata")
@@ -143,7 +153,7 @@ export default function CreateKecamatan() {
           "id",
           (wisataRows || []).map((w) => w.id)
         );
-    // delete kecamatan
+
     const { error } = await supabase.from("kecamatan").delete().eq("id", id);
     if (!error) {
       await refreshList();
@@ -154,7 +164,10 @@ export default function CreateKecamatan() {
   return (
     <div className="flex flex-col gap-6 p-6 min-h-[calc(100vh-2rem)] font-display">
       <div className="w-full max-w-5xl mx-auto flex justify-end">
-        <Button className="bg-primary text-white" onClick={() => setCreateOpen(true)}>
+        <Button
+          className="bg-primary text-white"
+          onClick={() => setCreateOpen(true)}
+        >
           Create Kecamatan
         </Button>
       </div>
@@ -174,7 +187,7 @@ export default function CreateKecamatan() {
                   </TableHead>
                   <TableHead className="text-white">Nama Kecamatan</TableHead>
                   <TableHead className="text-white">Alamat</TableHead>
-                <TableHead className="text-white">Kode Pos</TableHead>
+                  <TableHead className="text-white">Kode Pos</TableHead>
                   <TableHead className="text-white">Deskripsi</TableHead>
                   <TableHead className="text-white text-right">Aksi</TableHead>
                 </TableRow>
@@ -186,9 +199,19 @@ export default function CreateKecamatan() {
                       {idx + 1}
                     </TableCell>
                     <TableCell>{k.nama_kecamatan}</TableCell>
-                    <TableCell className="max-w-[280px] truncate" title={k.alamat || ""}>{k.alamat}</TableCell>
-                <TableCell>{k.kode_pos || "-"}</TableCell>
-                    <TableCell className="max-w-[320px] truncate" title={k.deskripsi || ""}>{k.deskripsi}</TableCell>
+                    <TableCell
+                      className="max-w-[280px] truncate"
+                      title={k.alamat || ""}
+                    >
+                      {k.alamat}
+                    </TableCell>
+                    <TableCell>{k.kode_pos || "-"}</TableCell>
+                    <TableCell
+                      className="max-w-[320px] truncate"
+                      title={k.deskripsi || ""}
+                    >
+                      {k.deskripsi}
+                    </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                         <button
@@ -211,8 +234,8 @@ export default function CreateKecamatan() {
                 ))}
                 {list.length === 0 && (
                   <TableRow>
-                <TableCell
-                  colSpan={6}
+                    <TableCell
+                      colSpan={6}
                       className="text-center py-6 text-gray-500"
                     >
                       Belum ada data
@@ -242,7 +265,7 @@ export default function CreateKecamatan() {
               </label>
               <Input
                 name="nama_kecamatan"
-                placeholder="Nama Kecamatan"
+                placeholder=""
                 onChange={handleChange}
                 required
               />
@@ -251,36 +274,40 @@ export default function CreateKecamatan() {
               </label>
               <textarea
                 name="alamat"
-                placeholder="Alamat"
+                placeholder="Malang, Jawa Timur"
                 onChange={handleChange}
                 required
-                className="border border-primary rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="border  rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
-            <label className="text-sm font-medium text-primary mb-1 block">
-              Kode Pos
-            </label>
-            <Input
-              name="kode_pos"
-              placeholder="Kode Pos"
-              onChange={handleChange}
-              inputMode="numeric"
-            />
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Kode Pos
+              </label>
+              <Input
+                name="kode_pos"
+                placeholder=""
+                onChange={handleChange}
+                inputMode="numeric"
+              />
               <label className="text-sm font-medium text-primary mb-1 block">
                 Deskripsi
               </label>
               <textarea
                 name="deskripsi"
-                placeholder="Deskripsi"
+                placeholder=""
                 onChange={handleChange}
                 required
-                className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="border rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
               <SheetFooter>
                 <div className="flex justify-end gap-2 w-full">
                   <SheetClose asChild>
-                    <Button variant="outline" type="button">Batal</Button>
+                    <Button variant="outline" type="button">
+                      Batal
+                    </Button>
                   </SheetClose>
-                  <Button className="bg-primary text-white" type="submit">Simpan</Button>
+                  <Button className="bg-primary text-white" type="submit">
+                    Simpan
+                  </Button>
                 </div>
               </SheetFooter>
             </form>
@@ -294,43 +321,67 @@ export default function CreateKecamatan() {
           </SheetHeader>
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-primary mb-1 block">Nama Kecamatan</label>
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Nama Kecamatan
+              </label>
               <Input
                 value={editData.nama_kecamatan}
-                onChange={(e) => setEditData({ ...editData, nama_kecamatan: e.target.value })}
+                onChange={(e) =>
+                  setEditData({ ...editData, nama_kecamatan: e.target.value })
+                }
               />
             </div>
             <div className="md:col-span-2">
-              <label className="text-sm font-medium text-primary mb-1 block">Alamat</label>
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Alamat
+              </label>
               <textarea
                 value={editData.alamat}
-                onChange={(e) => setEditData({ ...editData, alamat: e.target.value })}
-                className="border border-primary rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                onChange={(e) =>
+                  setEditData({ ...editData, alamat: e.target.value })
+                }
+                className="border  rounded-xl p-3 w-full min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-primary mb-1 block">Kode Pos</label>
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Kode Pos
+              </label>
               <Input
                 value={editData.kode_pos}
-                onChange={(e) => setEditData({ ...editData, kode_pos: e.target.value })}
+                onChange={(e) =>
+                  setEditData({ ...editData, kode_pos: e.target.value })
+                }
                 inputMode="numeric"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="text-sm font-medium text-primary mb-1 block">Deskripsi</label>
+              <label className="text-sm font-medium text-primary mb-1 block">
+                Deskripsi
+              </label>
               <textarea
                 value={editData.deskripsi}
-                onChange={(e) => setEditData({ ...editData, deskripsi: e.target.value })}
-                className="border border-primary rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
+                onChange={(e) =>
+                  setEditData({ ...editData, deskripsi: e.target.value })
+                }
+                className="border rounded-xl p-3 w-full min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
           </div>
           <SheetFooter>
             <div className="flex justify-end gap-2 w-full">
               <SheetClose asChild>
-                <Button variant="outline" type="button" onClick={cancelEdit}>Batal</Button>
+                <Button variant="outline" type="button" onClick={cancelEdit}>
+                  Batal
+                </Button>
               </SheetClose>
-              <Button className="bg-primary text-white" type="button" onClick={saveEdit}>Simpan</Button>
+              <Button
+                className="bg-primary text-white"
+                type="button"
+                onClick={saveEdit}
+              >
+                Simpan
+              </Button>
             </div>
           </SheetFooter>
         </SheetContent>
