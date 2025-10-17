@@ -6,7 +6,9 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-center md:text-left">
-            <h3 className="text-xl font-semibold">Pariwisata Malang Raya</h3>
+            <h3 className="text-xl font-semibold">
+              Wonderful <span className="text-blue-400">Malang</span>
+            </h3>
             <p className="text-white/70 text-sm">
               Jelajahi keindahan alam, budaya, dan kuliner.
             </p>
@@ -24,7 +26,7 @@ export default function Footer() {
           </nav>
         </div>
         <div className="mt-6 border-t border-white/10 pt-4 text-center text-xs text-white/60">
-          © {new Date().getFullYear()} Wonderful Malang. All rights reserved.
+          © 2025 Wonderful Malang. All rights reserved.
         </div>
       </div>
     </footer>

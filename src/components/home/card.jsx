@@ -25,7 +25,7 @@ const Card = () => {
   return (
     <>
       <div className="font-display w-full flex flex-col justify-center items-center gap-30">
-        <h1 className="font-bold text-7xl text-white">
+        <h1 className="font-bold text-7xl text-white text-center">
           Kenapa <span className="text-blue-400">Malang?</span>
         </h1>
         <div className="grid grid-cols-1 gap-20 md:grid-cols-3">

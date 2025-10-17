@@ -45,7 +45,7 @@ export function AppSidebar() {
     if (loggingOut) return;
     setLoggingOut(true);
     await supabase.auth.signOut().catch(() => {});
-    navigate("/adminlogin", { replace: true });
+    navigate("/", { replace: true });
   };
   return (
     <Sidebar className="font-display">
