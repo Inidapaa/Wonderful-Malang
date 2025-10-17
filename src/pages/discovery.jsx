@@ -3,7 +3,7 @@ import { supabase } from "@/supabase-client";
 import Navbar from "../global/navbar.jsx";
 import Footer from "../global/footer.jsx";
 import { Button } from "@/components/ui/button";
-import DiscoveryCard from "@/components/discovery/DiscoveryCard";
+import DiscoveryCard from "@/components/discovery/discoveryCard.jsx";
 import {
   Search,
   MapPin,
